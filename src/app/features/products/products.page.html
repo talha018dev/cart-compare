@@ -1,0 +1,24 @@
+<section class="products-page" aria-labelledby="products-heading">
+  <header class="products-page__header">
+    <h1 id="products-heading">Products</h1>
+    <p>Browse available products from the catalog.</p>
+  </header>
+
+  @if (products.isLoading()) {
+    <p>Loading products…</p>
+  } @else if (products.error()) {
+    <p role="alert">
+      Unable to load products. Please try again later.
+    </p>
+  } @else if (products.value()?.length === 0) {
+    <p>No products found.</p>
+  } @else {
+    <ul>
+      @for (product of products.value(); track product.id) {
+        <li>
+          {{ product.name }}
+        </li>
+      }
+    </ul>
+  }
+</section>
