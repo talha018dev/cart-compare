@@ -6,26 +6,26 @@
     </a>
     <label class="relative mx-auto block w-full max-w-2xl">
       <span class="sr-only">Search deals</span>
-      <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <circle cx="11" cy="11" r="7" />
-        <path d="m20 20-4-4" />
-      </svg>
-      <input
-        pInputText
-        type="search"
-        placeholder="Search milk, rice, oil..."
-        class="focus-ring h-12 w-full rounded-control border border-line bg-mist pl-12 pr-4 text-base placeholder:text-muted/80"
-        [value]="searchQuery()"
-        (input)="onSearch($event)"
-      />
+      <p-iconfield styleClass="block w-full">
+        <p-inputicon styleClass="pi pi-search text-muted" />
+        <input
+          pInputText
+          fluid
+          type="search"
+          placeholder="Search milk, rice, oil..."
+          class="focus-ring h-12 w-full rounded-control border-line bg-mist text-base placeholder:text-muted/80"
+          [value]="searchQuery()"
+          (input)="onSearch($event)"
+        />
+      </p-iconfield>
     </label>
-    <button pButton outlined class="focus-ring hidden h-11 shrink-0 items-center gap-2 rounded-control border border-line bg-white px-4 font-semibold md:flex" aria-label="Change location">
+    <p-button outlined class="hidden md:block" styleClass="focus-ring h-11 gap-2 rounded-control border-line bg-white px-4 font-semibold" ariaLabel="Change location">
       <svg class="h-5 w-5 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
         <circle cx="12" cy="10" r="2.5" />
       </svg>
       Dhaka <span class="text-muted">⌄</span>
-    </button>
+    </p-button>
   </div>
 </header>
 

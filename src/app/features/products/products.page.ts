@@ -1,7 +1,10 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { ButtonDirective } from '@openng/optimus-ui/button';
+import { FormsModule } from '@angular/forms';
+import { Button } from '@openng/optimus-ui/button';
+import { Select, SelectModule } from '@openng/optimus-ui/select';
 import { Skeleton } from '@openng/optimus-ui/skeleton';
+import { Tag } from '@openng/optimus-ui/tag';
 
 import { ProductFilterService } from './product-filter.service';
 import { Product, ProductViewModel, SortOption } from './product.model';
@@ -9,7 +12,7 @@ import { ProductService } from './product.service';
 
 @Component({
   selector: 'app-products-page',
-  imports: [NgOptimizedImage, ButtonDirective, Skeleton],
+  imports: [NgOptimizedImage, FormsModule, Button, Select, Skeleton, Tag, SelectModule],
   templateUrl: './products.page.html',
   styleUrl: './products.page.css',
 })
@@ -24,6 +27,11 @@ export class ProductsPage {
   protected readonly sortBy = this.filters.sortBy;
   protected readonly basket = this.filters.basket;
   protected readonly basketOpen = signal(false);
+  protected readonly sortOptions: { label: string; value: SortOption }[] = [
+    { label: 'Recommended', value: 'recommended' },
+    { label: 'Biggest discount', value: 'discount' },
+    { label: 'Lowest price', value: 'price' },
+  ];
 
   protected readonly categories = computed(() => {
     const items = this.products.value() ?? [];
@@ -106,8 +114,8 @@ export class ProductsPage {
     this.filters.setStore(store);
   }
 
-  onSortChange(event: Event): void {
-    this.filters.setSortBy((event.target as HTMLSelectElement).value as SortOption);
+  setSort(sort: SortOption): void {
+    this.filters.setSortBy(sort);
   }
 
   toggleBasket(productId: string): void {

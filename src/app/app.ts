@@ -1,13 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { ButtonDirective } from '@openng/optimus-ui/button';
+import { Button } from '@openng/optimus-ui/button';
+import { IconField } from '@openng/optimus-ui/iconfield';
+import { InputIcon } from '@openng/optimus-ui/inputicon';
 import { InputText } from '@openng/optimus-ui/inputtext';
 
 import { ProductFilterService } from './features/products/product-filter.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterOutlet, ButtonDirective, InputText],
+  imports: [RouterLink, RouterOutlet, Button, IconField, InputIcon, InputText],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
