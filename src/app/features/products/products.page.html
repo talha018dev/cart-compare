@@ -29,6 +29,7 @@
   <div class="mb-6 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
     <div class="flex gap-2 overflow-x-auto pb-1" aria-label="Product categories">
       <button
+        pButton
         type="button"
         class="category-chip focus-ring whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold"
         [class.border-navy]="selectedCategory() === 'all'"
@@ -43,6 +44,7 @@
       </button>
       @for (category of categories(); track category) {
         <button
+          pButton
           type="button"
           class="category-chip focus-ring whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold"
           [class.border-navy]="selectedCategory() === category"
@@ -61,6 +63,7 @@
     <div class="flex flex-wrap items-center gap-2">
       <span class="mr-1 text-sm font-semibold text-muted">Store</span>
       <button
+        pButton
         type="button"
         class="store-filter focus-ring store-dot flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-bold"
         [class.border-navy]="selectedStore() === 'all'"
@@ -75,6 +78,7 @@
       </button>
       @for (store of stores(); track store[0]) {
         <button
+          pButton
           type="button"
           class="store-filter focus-ring flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-bold"
           [class.border-navy]="selectedStore() === store[0]"
@@ -118,11 +122,11 @@
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite" aria-busy="true">
           @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
             <article class="overflow-hidden rounded-card border border-line bg-white shadow-card">
-              <div class="h-36 animate-pulse bg-mist"></div>
+              <p-skeleton height="9rem" styleClass="block rounded-none" />
               <div class="space-y-3 p-4">
-                <div class="h-4 w-24 animate-pulse rounded bg-mist"></div>
-                <div class="h-6 animate-pulse rounded bg-mist"></div>
-                <div class="h-4 w-32 animate-pulse rounded bg-mist"></div>
+                <p-skeleton width="6rem" height="1rem" />
+                <p-skeleton height="1.5rem" />
+                <p-skeleton width="8rem" height="1rem" />
               </div>
             </article>
           }
@@ -204,6 +208,7 @@
                 }
 
                 <button
+                  pButton
                   type="button"
                   class="focus-ring mt-4 w-full rounded-control px-4 py-2.5 font-bold transition hover:opacity-90"
                   [class.bg-mint]="isInBasket(item.product.id)"
@@ -233,6 +238,7 @@
           <h2 class="mt-1 text-2xl font-extrabold">Compare deals</h2>
         </div>
         <button
+          pButton
           type="button"
           class="focus-ring grid h-9 w-9 place-items-center rounded-full bg-mist text-xl lg:hidden"
           aria-label="Close comparison list"
@@ -271,6 +277,7 @@
                 </p>
               </div>
               <button
+                pButton
                 type="button"
                 class="focus-ring grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-white"
                 [attr.aria-label]="'Remove ' + item.product.name"
@@ -304,6 +311,7 @@
             <p class="mt-1 font-display text-xl font-extrabold text-navy">{{ bestStoreLabel() }}</p>
           </div>
           <button
+            pButton
             type="button"
             class="focus-ring mt-4 w-full rounded-control bg-coral px-4 py-3 font-bold text-white shadow-lg shadow-orange-200 transition hover:-translate-y-0.5"
           >
@@ -327,6 +335,7 @@
 }
 
 <button
+  pButton
   type="button"
   class="focus-ring fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-3 rounded-full bg-navy px-5 py-3 font-bold text-white shadow-lift lg:hidden"
   aria-label="Open comparison list"

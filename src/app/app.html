@@ -11,6 +11,7 @@
         <path d="m20 20-4-4" />
       </svg>
       <input
+        pInputText
         type="search"
         placeholder="Search milk, rice, oil..."
         class="focus-ring h-12 w-full rounded-control border border-line bg-mist pl-12 pr-4 text-base placeholder:text-muted/80"
@@ -18,7 +19,7 @@
         (input)="onSearch($event)"
       />
     </label>
-    <button class="focus-ring hidden h-11 shrink-0 items-center gap-2 rounded-control border border-line bg-white px-4 font-semibold md:flex" aria-label="Change location">
+    <button pButton outlined class="focus-ring hidden h-11 shrink-0 items-center gap-2 rounded-control border border-line bg-white px-4 font-semibold md:flex" aria-label="Change location">
       <svg class="h-5 w-5 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
         <circle cx="12" cy="10" r="2.5" />

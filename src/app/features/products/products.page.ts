@@ -1,5 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { ButtonDirective } from '@openng/optimus-ui/button';
+import { Skeleton } from '@openng/optimus-ui/skeleton';
 
 import { ProductFilterService } from './product-filter.service';
 import { Product, ProductViewModel, SortOption } from './product.model';
@@ -7,7 +9,7 @@ import { ProductService } from './product.service';
 
 @Component({
   selector: 'app-products-page',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, ButtonDirective, Skeleton],
   templateUrl: './products.page.html',
   styleUrl: './products.page.css',
 })

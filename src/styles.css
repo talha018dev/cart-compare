@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import '@openng/optimus-ui-tailwindcss';
+@import '@openng/icons/openng-icons.css';
 
 @theme {
   --color-ink: #102a36;
