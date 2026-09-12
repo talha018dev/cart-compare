@@ -1,12 +1,33 @@
-<header class="app-header">
-  <nav class="app-nav" aria-label="Main navigation">
-    <a class="app-nav__brand" routerLink="/">Cart Compare</a>
-    <a class="app-nav__link" routerLink="/products" routerLinkActive="app-nav__link--active">
-      Products
+<header class="sticky top-0 z-40 border-b border-line/80 bg-paper/95 backdrop-blur">
+  <div class="shell flex h-20 items-center gap-4">
+    <a routerLink="/products" class="focus-ring flex shrink-0 items-center gap-2 rounded-lg" aria-label="CartCompare home">
+      <span class="grid h-10 w-10 place-items-center rounded-xl bg-coral text-xl font-black text-white">C</span>
+      <span class="hidden font-display text-xl font-extrabold sm:block">Cart<span class="text-coral">Compare</span></span>
     </a>
-  </nav>
+    <label class="relative mx-auto block w-full max-w-2xl">
+      <span class="sr-only">Search deals</span>
+      <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-4-4" />
+      </svg>
+      <input
+        type="search"
+        placeholder="Search milk, rice, oil..."
+        class="focus-ring h-12 w-full rounded-control border border-line bg-mist pl-12 pr-4 text-base placeholder:text-muted/80"
+        [value]="searchQuery()"
+        (input)="onSearch($event)"
+      />
+    </label>
+    <button class="focus-ring hidden h-11 shrink-0 items-center gap-2 rounded-control border border-line bg-white px-4 font-semibold md:flex" aria-label="Change location">
+      <svg class="h-5 w-5 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </svg>
+      Dhaka <span class="text-muted">⌄</span>
+    </button>
+  </div>
 </header>
 
-<main class="app-main">
+<main>
   <router-outlet />
 </main>

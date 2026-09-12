@@ -1,24 +1,337 @@
-<section class="products-page" aria-labelledby="products-heading">
-  <header class="products-page__header">
-    <h1 id="products-heading">Products</h1>
-    <p>Browse available products from the catalog.</p>
-  </header>
-
-  @if (products.isLoading()) {
-    <p>Loading products…</p>
-  } @else if (products.error()) {
-    <p role="alert">
-      Unable to load products. Please try again later.
-    </p>
-  } @else if (products.value()?.length === 0) {
-    <p>No products found.</p>
-  } @else {
-    <ul>
-      @for (product of products.value(); track product.id) {
-        <li>
-          {{ product.name }}
-        </li>
-      }
-    </ul>
-  }
+<section class="border-b border-line bg-navy text-white">
+  <div class="shell grid gap-8 py-9 md:grid-cols-[1.4fr_.6fr] md:items-end md:py-12">
+    <div>
+      <span class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-mint">
+        <span class="h-2 w-2 rounded-full bg-mint"></span>
+        Live prices from your stores
+      </span>
+      <h1 class="max-w-3xl text-4xl font-extrabold leading-[1.05] sm:text-5xl">
+        Spend less on the groceries already on your list.
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-white/70">
+        See verified discounts from Shwapno and Agora, then compare matched products without opening two stores.
+      </p>
+    </div>
+    <div class="grid grid-cols-2 gap-3 md:justify-self-end">
+      <div class="rounded-card border border-white/10 bg-white/5 p-4">
+        <strong class="font-display text-3xl text-mint">{{ filteredProducts().length }}</strong>
+        <p class="mt-1 text-sm text-white/65">live deals</p>
+      </div>
+      <div class="rounded-card border border-white/10 bg-white/5 p-4">
+        <strong class="font-display text-3xl text-coral">{{ formatPrice(totalSavings()) }}</strong>
+        <p class="mt-1 text-sm text-white/65">possible savings</p>
+      </div>
+    </div>
+  </div>
 </section>
+
+<div class="shell py-7">
+  <div class="mb-6 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <div class="flex gap-2 overflow-x-auto pb-1" aria-label="Product categories">
+      <button
+        type="button"
+        class="category-chip focus-ring whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold"
+        [class.border-navy]="selectedCategory() === 'all'"
+        [class.bg-navy]="selectedCategory() === 'all'"
+        [class.text-white]="selectedCategory() === 'all'"
+        [class.border-line]="selectedCategory() !== 'all'"
+        [class.bg-white]="selectedCategory() !== 'all'"
+        [attr.aria-pressed]="selectedCategory() === 'all'"
+        (click)="setCategory('all')"
+      >
+        All deals
+      </button>
+      @for (category of categories(); track category) {
+        <button
+          type="button"
+          class="category-chip focus-ring whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold"
+          [class.border-navy]="selectedCategory() === category"
+          [class.bg-navy]="selectedCategory() === category"
+          [class.text-white]="selectedCategory() === category"
+          [class.border-line]="selectedCategory() !== category"
+          [class.bg-white]="selectedCategory() !== category"
+          [attr.aria-pressed]="selectedCategory() === category"
+          (click)="setCategory(category)"
+        >
+          {{ category }}
+        </button>
+      }
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="mr-1 text-sm font-semibold text-muted">Store</span>
+      <button
+        type="button"
+        class="store-filter focus-ring store-dot flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-bold"
+        [class.border-navy]="selectedStore() === 'all'"
+        [class.bg-navy]="selectedStore() === 'all'"
+        [class.text-white]="selectedStore() === 'all'"
+        [class.border-line]="selectedStore() !== 'all'"
+        [class.bg-white]="selectedStore() !== 'all'"
+        [attr.aria-pressed]="selectedStore() === 'all'"
+        (click)="setStore('all')"
+      >
+        Both
+      </button>
+      @for (store of stores(); track store[0]) {
+        <button
+          type="button"
+          class="store-filter focus-ring flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-bold"
+          [class.border-navy]="selectedStore() === store[0]"
+          [class.bg-navy]="selectedStore() === store[0]"
+          [class.text-white]="selectedStore() === store[0]"
+          [class.border-line]="selectedStore() !== store[0]"
+          [class.bg-white]="selectedStore() !== store[0]"
+          [attr.aria-pressed]="selectedStore() === store[0]"
+          (click)="setStore(store[0])"
+        >
+          <span class="h-2 w-2 rounded-full" [class]="storeTone(store[0]).dot"></span>
+          {{ store[1] }}
+        </button>
+      }
+      <select
+        class="focus-ring ml-auto rounded-full border border-line bg-white px-3 py-2 text-sm font-bold"
+        aria-label="Sort deals"
+        [value]="sortBy()"
+        (change)="onSortChange($event)"
+      >
+        <option value="recommended">Recommended</option>
+        <option value="discount">Biggest discount</option>
+        <option value="price">Lowest price</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid items-start gap-7 lg:grid-cols-[minmax(0,1fr)_350px]">
+    <section aria-labelledby="deals-title">
+      <div class="mb-4 flex items-end justify-between">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[.18em] text-coral">Fresh price drops</p>
+          <h2 id="deals-title" class="mt-1 text-2xl font-extrabold">Today's best deals</h2>
+        </div>
+        <p class="text-sm font-medium text-muted">
+          {{ filteredProducts().length }} deal{{ filteredProducts().length === 1 ? '' : 's' }}
+        </p>
+      </div>
+
+      @if (products.isLoading()) {
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite" aria-busy="true">
+          @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
+            <article class="overflow-hidden rounded-card border border-line bg-white shadow-card">
+              <div class="h-36 animate-pulse bg-mist"></div>
+              <div class="space-y-3 p-4">
+                <div class="h-4 w-24 animate-pulse rounded bg-mist"></div>
+                <div class="h-6 animate-pulse rounded bg-mist"></div>
+                <div class="h-4 w-32 animate-pulse rounded bg-mist"></div>
+              </div>
+            </article>
+          }
+        </div>
+      } @else if (products.error()) {
+        <div class="rounded-card border border-dashed border-line bg-white p-12 text-center" role="alert">
+          <div class="text-4xl" aria-hidden="true">⚠</div>
+          <h3 class="mt-3 text-xl font-extrabold">Unable to load products</h3>
+          <p class="mt-2 text-muted">Make sure the API is running at localhost:5000 and try again.</p>
+        </div>
+      } @else if (filteredProducts().length === 0) {
+        <div class="rounded-card border border-dashed border-line bg-white p-12 text-center">
+          <div class="text-4xl" aria-hidden="true">⌕</div>
+          <h3 class="mt-3 text-xl font-extrabold">No matching deals</h3>
+          <p class="mt-2 text-muted">Try another product or clear a filter.</p>
+        </div>
+      } @else {
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          @for (item of filteredProducts(); track item.product.id) {
+            <article class="deal-card overflow-hidden rounded-card border border-line bg-white shadow-card">
+              <div class="relative grid h-36 place-items-center bg-mist">
+                @if (item.product.imageUrl; as imageUrl) {
+                  <img
+                    [ngSrc]="imageUrl"
+                    [alt]="item.product.name"
+                    width="280"
+                    height="144"
+                    class="h-full w-full object-contain p-4"
+                  />
+                } @else {
+                  <span class="text-5xl text-muted/40" aria-hidden="true">🛒</span>
+                }
+                @if (item.discount; as discount) {
+                  <span class="absolute left-3 top-3 rounded-full bg-coral px-2.5 py-1 text-sm font-extrabold text-white">
+                    -{{ discount }}%
+                  </span>
+                }
+                <span class="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-muted">
+                  {{ item.sizeLabel }}
+                </span>
+              </div>
+
+              <div class="p-4">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="flex items-center gap-2 text-sm font-bold" [class]="storeTone(item.bestOffer.storeSlug).text">
+                    <span class="h-2 w-2 rounded-full" [class]="storeTone(item.bestOffer.storeSlug).dot"></span>
+                    {{ item.bestOffer.storeName }}
+                  </span>
+                  <span class="text-xs text-muted">{{ item.product.category }}</span>
+                </div>
+
+                <h3 class="mt-3 min-h-12 text-lg font-extrabold leading-snug">{{ item.product.name }}</h3>
+                <p class="text-sm text-muted">{{ item.sizeLabel }}</p>
+
+                <div class="mt-4 flex items-end justify-between">
+                  <div>
+                    <span class="font-display text-2xl font-extrabold">{{ formatPrice(item.bestOffer.price) }}</span>
+                    @if (item.bestOffer.originalPrice; as originalPrice) {
+                      <span class="ml-2 text-sm text-muted line-through">{{ formatPrice(originalPrice) }}</span>
+                    }
+                  </div>
+                  @if (item.savings; as savings) {
+                    <span class="rounded-md bg-mint px-2 py-1 text-xs font-bold text-navy">
+                      Save {{ formatPrice(savings) }}
+                    </span>
+                  }
+                </div>
+
+                @if (item.compareOffer; as compareOffer) {
+                  <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-sm">
+                    <span class="text-muted">
+                      {{ oppositeStoreName(item.bestOffer.storeSlug) }}
+                      <strong class="text-ink">{{ formatPrice(compareOffer.price) }}</strong>
+                    </span>
+                    <span class="font-bold text-coral">
+                      {{ formatPrice(compareOffer.price - item.bestOffer.price) }} less
+                    </span>
+                  </div>
+                }
+
+                <button
+                  type="button"
+                  class="focus-ring mt-4 w-full rounded-control px-4 py-2.5 font-bold transition hover:opacity-90"
+                  [class.bg-mint]="isInBasket(item.product.id)"
+                  [class.text-navy]="isInBasket(item.product.id)"
+                  [class.bg-navy]="!isInBasket(item.product.id)"
+                  [class.text-white]="!isInBasket(item.product.id)"
+                  [attr.aria-pressed]="isInBasket(item.product.id)"
+                  (click)="toggleBasket(item.product.id)"
+                >
+                  {{ isInBasket(item.product.id) ? '✓ Added to compare' : '+ Add to compare' }}
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <aside
+      class="basket-drawer sticky top-24 rounded-card border border-line bg-paper p-5 shadow-card"
+      [class.open]="basketOpen()"
+      aria-label="Comparison list"
+    >
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[.18em] text-coral">Your shortlist</p>
+          <h2 class="mt-1 text-2xl font-extrabold">Compare deals</h2>
+        </div>
+        <button
+          type="button"
+          class="focus-ring grid h-9 w-9 place-items-center rounded-full bg-mist text-xl lg:hidden"
+          aria-label="Close comparison list"
+          (click)="closeBasket()"
+        >
+          ×
+        </button>
+      </div>
+      <p class="mt-2 text-sm leading-relaxed text-muted">
+        Add products to see what your selected deals cost at each store.
+      </p>
+
+      @if (basketItems().length === 0) {
+        <div class="my-6 rounded-control border border-dashed border-line bg-mist p-5 text-center text-sm text-muted">
+          Your comparison list is empty.<br />Add a deal to get started.
+        </div>
+      } @else {
+        <div class="my-5 space-y-3">
+          @for (item of basketItems(); track item.product.id) {
+            <div class="flex items-center gap-3 rounded-control bg-mist p-3">
+              @if (item.product.imageUrl; as imageUrl) {
+                <img
+                  [ngSrc]="imageUrl"
+                  alt=""
+                  width="40"
+                  height="40"
+                  class="h-10 w-10 rounded-lg bg-white object-contain p-1"
+                />
+              } @else {
+                <span class="grid h-10 w-10 place-items-center rounded-lg bg-white text-xl" aria-hidden="true">🛒</span>
+              }
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-sm font-bold">{{ item.product.name }}</p>
+                <p class="text-xs text-muted">
+                  {{ item.bestOffer.storeName }} · {{ formatPrice(item.bestOffer.price) }}
+                </p>
+              </div>
+              <button
+                type="button"
+                class="focus-ring grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-white"
+                [attr.aria-label]="'Remove ' + item.product.name"
+                (click)="toggleBasket(item.product.id)"
+              >
+                ×
+              </button>
+            </div>
+          }
+        </div>
+
+        <div>
+          <div class="space-y-3 border-t border-line pt-4">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-2 font-semibold">
+                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                Shwapno
+              </span>
+              <strong>{{ formatPrice(shwapnoTotal()) }}</strong>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-2 font-semibold">
+                <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+                Agora
+              </span>
+              <strong>{{ formatPrice(agoraTotal()) }}</strong>
+            </div>
+          </div>
+          <div class="mt-4 rounded-control bg-mint p-4">
+            <p class="text-sm font-semibold text-navy/70">Best available total</p>
+            <p class="mt-1 font-display text-xl font-extrabold text-navy">{{ bestStoreLabel() }}</p>
+          </div>
+          <button
+            type="button"
+            class="focus-ring mt-4 w-full rounded-control bg-coral px-4 py-3 font-bold text-white shadow-lg shadow-orange-200 transition hover:-translate-y-0.5"
+          >
+            Review full comparison
+          </button>
+        </div>
+      }
+
+      <p class="mt-4 text-center text-xs text-muted">Prices from live catalog · verify before purchase</p>
+    </aside>
+  </div>
+</div>
+
+@if (basketOpen()) {
+  <div
+    class="fixed inset-0 z-50 bg-ink/50 backdrop-blur-sm lg:hidden"
+    role="presentation"
+    (click)="closeBasket()"
+    (keydown.escape)="closeBasket()"
+  ></div>
+}
+
+<button
+  type="button"
+  class="focus-ring fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-3 rounded-full bg-navy px-5 py-3 font-bold text-white shadow-lift lg:hidden"
+  aria-label="Open comparison list"
+  (click)="openBasket()"
+>
+  Compare list
+  <span class="rounded-full bg-coral px-2 py-0.5 text-xs">{{ basketItems().length }}</span>
+</button>

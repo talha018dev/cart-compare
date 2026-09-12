@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Product } from './product.model';
 
-const PRODUCTS_API_URL = 'http://localhost:5000/api/products';
+const PRODUCTS_API_URL = 'http://localhost:5000/api/v1/products';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -14,7 +14,5 @@ export class ProductService {
     return this.http.get<Product[]>(PRODUCTS_API_URL);
   }
 
-  readonly products = httpResource<Product[]>(
-    () => PRODUCTS_API_URL
-  );
+  readonly products = httpResource<Product[]>(() => PRODUCTS_API_URL);
 }
