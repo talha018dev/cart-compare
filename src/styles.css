@@ -3,14 +3,23 @@
 @import '@openng/icons/openng-icons.css';
 
 @theme {
-  --color-ink: #102a36;
-  --color-navy: #143b4a;
-  --color-coral: #ff6846;
-  --color-mint: #bdf3d4;
-  --color-mist: #f1f6f7;
-  --color-line: #d8e4e7;
-  --color-paper: #ffffff;
-  --color-muted: #60747d;
+  /* Brand */
+  --color-primary: #143b4a;
+  --color-accent: #ff6846;
+  --color-highlight: #bdf3d4;
+
+  /* Text */
+  --color-text: #102a36;
+  --color-text-muted: #60747d;
+  --color-text-on-primary: #ffffff;
+  --color-text-on-accent: #ffffff;
+
+  /* Surfaces and borders */
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f1f6f7;
+  --color-border: #d8e4e7;
+  --color-store-shwapno: #15803d;
+  --color-store-agora: #c2410c;
 
   --font-display: 'Manrope', sans-serif;
   --font-body: 'DM Sans', sans-serif;
@@ -27,6 +36,24 @@
   --content-gutter: clamp(1rem, 3vw, 2.5rem);
 }
 
+[data-theme='dark'] {
+  --color-primary: #a9ead1;
+  --color-accent: #ff7d61;
+  --color-highlight: #174c3f;
+  --color-text: #edf7f5;
+  --color-text-muted: #9eb1b7;
+  --color-text-on-primary: #0e2924;
+  --color-text-on-accent: #ffffff;
+  --color-surface: #15252b;
+  --color-surface-subtle: #0e191d;
+  --color-border: #294149;
+  --color-store-shwapno: #4ade80;
+  --color-store-agora: #fb923c;
+  --shadow-card: 0 14px 40px rgba(0, 0, 0, 0.2);
+  --shadow-lift: 0 18px 54px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -38,9 +65,10 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  background: var(--color-mist);
-  color: var(--color-ink);
+  background: var(--color-surface-subtle);
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 h1,
@@ -64,6 +92,6 @@ select {
 }
 
 .focus-ring:focus-visible {
-  outline: 3px solid rgba(255, 104, 70, 0.35);
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
   outline-offset: 2px;
 }

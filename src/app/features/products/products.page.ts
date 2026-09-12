@@ -58,7 +58,8 @@ export class ProductsPage {
   protected readonly filteredProducts = computed(() => {
     let items = this.productViewModels().filter((item) => {
       const matchesCategory =
-        this.selectedCategory() === 'all' || item.product.category === this.selectedCategory();
+        this.selectedCategory() === 'all' ||
+        item.product.category.toLowerCase() === this.selectedCategory().toLowerCase();
       const matchesStore =
         this.selectedStore() === 'all' ||
         item.product.storeProducts.some((storeProduct) => storeProduct.storeSlug === this.selectedStore());
@@ -140,8 +141,8 @@ export class ProductsPage {
 
   storeTone(storeSlug: string): { text: string; dot: string } {
     return storeSlug === 'shwapno'
-      ? { text: 'text-emerald-700', dot: 'bg-emerald-500' }
-      : { text: 'text-orange-700', dot: 'bg-orange-500' };
+      ? { text: 'text-store-shwapno', dot: 'bg-store-shwapno' }
+      : { text: 'text-store-agora', dot: 'bg-store-agora' };
   }
 
   oppositeStoreName(storeSlug: string): string {

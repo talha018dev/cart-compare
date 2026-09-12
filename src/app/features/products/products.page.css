@@ -8,7 +8,7 @@
 .deal-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lift);
-  border-color: #b9cdd2;
+  border-color: color-mix(in srgb, var(--color-border) 55%, var(--color-primary));
 }
 
 .store-dot::before {
@@ -22,6 +22,25 @@
 
 .basket-drawer {
   transition: transform 0.25s ease;
+}
+
+.hero-section {
+  color: var(--color-text-on-primary);
+}
+
+.hero-kicker {
+  background: color-mix(in srgb, var(--color-text-on-primary) 10%, transparent);
+  color: var(--color-highlight);
+}
+
+.hero-copy,
+.hero-stat-label {
+  color: color-mix(in srgb, var(--color-text-on-primary) 72%, transparent);
+}
+
+.hero-stat {
+  border-color: color-mix(in srgb, var(--color-text-on-primary) 12%, transparent);
+  background: color-mix(in srgb, var(--color-text-on-primary) 6%, transparent);
 }
 
 @media (max-width: 1023px) {

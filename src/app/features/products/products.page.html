@@ -1,31 +1,31 @@
-<section class="border-b border-line bg-navy text-white">
+<section class="hero-section border-b border-border bg-primary text-text-on-primary">
   <div class="shell grid gap-8 py-9 md:grid-cols-[1.4fr_.6fr] md:items-end md:py-12">
     <div>
-      <span class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-mint">
-        <span class="h-2 w-2 rounded-full bg-mint"></span>
+      <span class="hero-kicker mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold">
+        <span class="h-2 w-2 rounded-full bg-highlight"></span>
         Live prices from your stores
       </span>
       <h1 class="max-w-3xl text-4xl font-extrabold leading-[1.05] sm:text-5xl">
         Spend less on the groceries already on your list.
       </h1>
-      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-white/70">
+      <p class="hero-copy mt-4 max-w-2xl text-lg leading-relaxed">
         See verified discounts from Shwapno and Agora, then compare matched products without opening two stores.
       </p>
     </div>
     <div class="grid grid-cols-2 gap-3 md:justify-self-end">
-      <div class="rounded-card border border-white/10 bg-white/5 p-4">
-        <strong class="font-display text-3xl text-mint">{{ filteredProducts().length }}</strong>
-        <p class="mt-1 text-sm text-white/65">live deals</p>
+      <div class="hero-stat rounded-card border p-4">
+        <strong class="font-display text-3xl text-highlight">{{ filteredProducts().length }}</strong>
+        <p class="hero-stat-label mt-1 text-sm">live deals</p>
       </div>
-      <div class="rounded-card border border-white/10 bg-white/5 p-4">
-        <strong class="font-display text-3xl text-coral">{{ formatPrice(totalSavings()) }}</strong>
-        <p class="mt-1 text-sm text-white/65">possible savings</p>
+      <div class="hero-stat rounded-card border p-4">
+        <strong class="font-display text-3xl text-accent">{{ formatPrice(totalSavings()) }}</strong>
+        <p class="hero-stat-label mt-1 text-sm">possible savings</p>
       </div>
     </div>
   </div>
 </section>
 
-<div class="shell py-7">
+<div class="shell product-shell py-7">
   <div class="mb-6 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
     <div class="flex gap-2 overflow-x-auto pb-1" aria-label="Product categories">
       <p-button
@@ -51,7 +51,7 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-2">
-      <span class="mr-1 text-sm font-semibold text-muted">Store</span>
+      <span class="mr-1 text-sm font-semibold text-text-muted">Store</span>
       <p-button
         label="Both"
         rounded
@@ -91,10 +91,10 @@
     <section aria-labelledby="deals-title">
       <div class="mb-4 flex items-end justify-between">
         <div>
-          <p class="text-sm font-bold uppercase tracking-[.18em] text-coral">Fresh price drops</p>
+          <p class="text-sm font-bold uppercase tracking-[.18em] text-accent">Fresh price drops</p>
           <h2 id="deals-title" class="mt-1 text-2xl font-extrabold">Today's best deals</h2>
         </div>
-        <p class="text-sm font-medium text-muted">
+        <p class="text-sm font-medium text-text-muted">
           {{ filteredProducts().length }} deal{{ filteredProducts().length === 1 ? '' : 's' }}
         </p>
       </div>
@@ -102,7 +102,7 @@
       @if (products.isLoading()) {
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite" aria-busy="true">
           @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
-            <article class="overflow-hidden rounded-card border border-line bg-white shadow-card">
+            <article class="overflow-hidden rounded-card border border-border bg-surface shadow-card">
               <p-skeleton height="9rem" styleClass="block rounded-none" />
               <div class="space-y-3 p-4">
                 <p-skeleton width="6rem" height="1rem" />
@@ -113,22 +113,22 @@
           }
         </div>
       } @else if (products.error()) {
-        <div class="rounded-card border border-dashed border-line bg-white p-12 text-center" role="alert">
+        <div class="rounded-card border border-dashed border-border bg-surface p-12 text-center" role="alert">
           <div class="text-4xl" aria-hidden="true">⚠</div>
           <h3 class="mt-3 text-xl font-extrabold">Unable to load products</h3>
-          <p class="mt-2 text-muted">Make sure the API is running at localhost:5000 and try again.</p>
+          <p class="mt-2 text-text-muted">Make sure the API is running at localhost:5000 and try again.</p>
         </div>
       } @else if (filteredProducts().length === 0) {
-        <div class="rounded-card border border-dashed border-line bg-white p-12 text-center">
+        <div class="rounded-card border border-dashed border-border bg-surface p-12 text-center">
           <div class="text-4xl" aria-hidden="true">⌕</div>
           <h3 class="mt-3 text-xl font-extrabold">No matching deals</h3>
-          <p class="mt-2 text-muted">Try another product or clear a filter.</p>
+          <p class="mt-2 text-text-muted">Try another product or clear a filter.</p>
         </div>
       } @else {
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           @for (item of filteredProducts(); track item.product.id) {
-            <article class="deal-card overflow-hidden rounded-card border border-line bg-white shadow-card">
-              <div class="relative grid h-36 place-items-center bg-mist">
+            <article class="deal-card overflow-hidden rounded-card border border-border bg-surface shadow-card">
+              <div class="relative grid h-36 place-items-center bg-surface-subtle">
                 @if (item.product.imageUrl; as imageUrl) {
                   <img
                     [ngSrc]="imageUrl"
@@ -138,12 +138,12 @@
                     class="h-full w-full object-contain p-4"
                   />
                 } @else {
-                  <span class="text-5xl text-muted/40" aria-hidden="true">🛒</span>
+                  <span class="text-5xl text-text-muted/40" aria-hidden="true">🛒</span>
                 }
                 @if (item.discount; as discount) {
                   <p-tag [value]="'-' + discount + '%'" severity="danger" rounded styleClass="absolute left-3 top-3 px-2.5 py-1 text-sm font-extrabold" />
                 }
-                <span class="absolute bottom-3 right-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-muted">
+                  <span class="absolute bottom-3 end-3 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-bold text-text-muted">
                   {{ item.sizeLabel }}
                 </span>
               </div>
@@ -154,17 +154,17 @@
                     <span class="h-2 w-2 rounded-full" [class]="storeTone(item.bestOffer.storeSlug).dot"></span>
                     {{ item.bestOffer.storeName }}
                   </span>
-                  <span class="text-xs text-muted">{{ item.product.category }}</span>
+                  <span class="text-xs text-text-muted">{{ item.product.category }}</span>
                 </div>
 
                 <h3 class="mt-3 min-h-12 text-lg font-extrabold leading-snug">{{ item.product.name }}</h3>
-                <p class="text-sm text-muted">{{ item.sizeLabel }}</p>
+                <p class="text-sm text-text-muted">{{ item.sizeLabel }}</p>
 
                 <div class="mt-4 flex items-end justify-between">
                   <div>
                     <span class="font-display text-2xl font-extrabold">{{ formatPrice(item.bestOffer.price) }}</span>
                     @if (item.bestOffer.originalPrice; as originalPrice) {
-                      <span class="ml-2 text-sm text-muted line-through">{{ formatPrice(originalPrice) }}</span>
+                      <span class="ml-2 text-sm text-text-muted line-through">{{ formatPrice(originalPrice) }}</span>
                     }
                   </div>
                   @if (item.savings; as savings) {
@@ -173,12 +173,12 @@
                 </div>
 
                 @if (item.compareOffer; as compareOffer) {
-                  <div class="mt-4 flex items-center justify-between border-t border-line pt-3 text-sm">
-                    <span class="text-muted">
+                  <div class="mt-4 flex items-center justify-between border-t border-border pt-3 text-sm">
+                    <span class="text-text-muted">
                       {{ oppositeStoreName(item.bestOffer.storeSlug) }}
-                      <strong class="text-ink">{{ formatPrice(compareOffer.price) }}</strong>
+                      <strong class="text-text">{{ formatPrice(compareOffer.price) }}</strong>
                     </span>
-                    <span class="font-bold text-coral">
+                    <span class="font-bold text-accent">
                       {{ formatPrice(compareOffer.price - item.bestOffer.price) }} less
                     </span>
                   </div>
@@ -200,85 +200,85 @@
       }
     </section>
 
-    <aside
-      class="basket-drawer sticky top-24 rounded-card border border-line bg-paper p-5 shadow-card"
+    <aside id="comparison-list"
+      class="basket-drawer sticky top-24 rounded-card border border-border bg-surface p-5 shadow-card"
       [class.open]="basketOpen()"
       aria-label="Comparison list"
     >
       <div class="flex items-start justify-between">
         <div>
-          <p class="text-sm font-bold uppercase tracking-[.18em] text-coral">Your shortlist</p>
+          <p class="text-sm font-bold uppercase tracking-[.18em] text-accent">Your shortlist</p>
           <h2 class="mt-1 text-2xl font-extrabold">Compare deals</h2>
         </div>
         <p-button icon="pi pi-times" rounded text class="lg:hidden" styleClass="focus-ring h-9 w-9" ariaLabel="Close comparison list" (onClick)="closeBasket()" />
       </div>
-      <p class="mt-2 text-sm leading-relaxed text-muted">
+      <p class="mt-2 text-sm leading-relaxed text-text-muted">
         Add products to see what your selected deals cost at each store.
       </p>
 
       @if (basketItems().length === 0) {
-        <div class="my-6 rounded-control border border-dashed border-line bg-mist p-5 text-center text-sm text-muted">
+        <div class="my-6 rounded-control border border-dashed border-border bg-surface-subtle p-5 text-center text-sm text-text-muted">
           Your comparison list is empty.<br />Add a deal to get started.
         </div>
       } @else {
         <div class="my-5 space-y-3">
           @for (item of basketItems(); track item.product.id) {
-            <div class="flex items-center gap-3 rounded-control bg-mist p-3">
+            <div class="flex items-center gap-3 rounded-control bg-surface-subtle p-3">
               @if (item.product.imageUrl; as imageUrl) {
                 <img
                   [ngSrc]="imageUrl"
                   alt=""
                   width="40"
                   height="40"
-                  class="h-10 w-10 rounded-lg bg-white object-contain p-1"
+                  class="h-10 w-10 rounded-lg bg-surface object-contain p-1"
                 />
               } @else {
-                <span class="grid h-10 w-10 place-items-center rounded-lg bg-white text-xl" aria-hidden="true">🛒</span>
+                <span class="grid h-10 w-10 place-items-center rounded-lg bg-surface text-xl" aria-hidden="true">🛒</span>
               }
               <div class="min-w-0 flex-1">
                 <p class="truncate text-sm font-bold">{{ item.product.name }}</p>
-                <p class="text-xs text-muted">
+                <p class="text-xs text-text-muted">
                   {{ item.bestOffer.storeName }} · {{ formatPrice(item.bestOffer.price) }}
                 </p>
               </div>
-              <p-button icon="pi pi-times" rounded text styleClass="focus-ring h-8 w-8 text-muted hover:bg-white" [ariaLabel]="'Remove ' + item.product.name" (onClick)="toggleBasket(item.product.id)" />
+              <p-button icon="pi pi-times" rounded text styleClass="focus-ring h-8 w-8 text-text-muted hover:bg-surface" [ariaLabel]="'Remove ' + item.product.name" (onClick)="toggleBasket(item.product.id)" />
             </div>
           }
         </div>
 
         <div>
-          <div class="space-y-3 border-t border-line pt-4">
+          <div class="space-y-3 border-t border-border pt-4">
             <div class="flex items-center justify-between">
               <span class="flex items-center gap-2 font-semibold">
-                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span class="h-2 w-2 rounded-full bg-store-shwapno"></span>
                 Shwapno
               </span>
               <strong>{{ formatPrice(shwapnoTotal()) }}</strong>
             </div>
             <div class="flex items-center justify-between">
               <span class="flex items-center gap-2 font-semibold">
-                <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+                <span class="h-2 w-2 rounded-full bg-store-agora"></span>
                 Agora
               </span>
               <strong>{{ formatPrice(agoraTotal()) }}</strong>
             </div>
           </div>
-          <div class="mt-4 rounded-control bg-mint p-4">
-            <p class="text-sm font-semibold text-navy/70">Best available total</p>
-            <p class="mt-1 font-display text-xl font-extrabold text-navy">{{ bestStoreLabel() }}</p>
+          <div class="mt-4 rounded-control bg-highlight p-4">
+            <p class="text-sm font-semibold text-primary/70">Best available total</p>
+            <p class="mt-1 font-display text-xl font-extrabold text-primary">{{ bestStoreLabel() }}</p>
           </div>
-          <p-button label="Review full comparison" fluid severity="warn" styleClass="focus-ring mt-4 rounded-control px-4 py-3 font-bold shadow-lg shadow-orange-200 transition hover:-translate-y-0.5" />
+          <p-button label="Review full comparison" fluid severity="warn" styleClass="focus-ring mt-4 rounded-control px-4 py-3 font-bold shadow-lg transition hover:-translate-y-0.5" />
         </div>
       }
 
-      <p class="mt-4 text-center text-xs text-muted">Prices from live catalog · verify before purchase</p>
+      <p class="mt-4 text-center text-xs text-text-muted">Prices from live catalog · verify before purchase</p>
     </aside>
   </div>
 </div>
 
 @if (basketOpen()) {
   <div
-    class="fixed inset-0 z-50 bg-ink/50 backdrop-blur-sm lg:hidden"
+    class="fixed inset-0 z-50 bg-text/50 backdrop-blur-sm lg:hidden"
     role="presentation"
     (click)="closeBasket()"
     (keydown.escape)="closeBasket()"
